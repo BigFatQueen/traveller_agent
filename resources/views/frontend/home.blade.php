@@ -201,27 +201,40 @@
                 @if(count($tours_carousel) > 0)
                 @foreach($tours_carousel as $tour)
                 <div>
-
-
                     <div class="card" style="width: 18rem;">
-                      @php
-                        $photo = json_decode($tour->photo);
+                    @php
+                        
+                        $photo=json_decode($tour->photo);
 
-                        $photo_array = array_rand($photo,1);
-                      @endphp  
+                        if($photo == null){
+                          echo  '<div style="overflow: hidden; width: auto ; height: 180px;">
 
-                      <div style="overflow: hidden; width: auto ; height: 180px;">
+                          <img src="" class="card-img-top img-fluid" alt="..." >
 
-                          <img src="{{asset('storage/'.$photo[$photo_array])}}" class="card-img-top img-fluid" alt="..." >
+                      </div>';
+                        }else{
+                            $photo_array = array_rand($photo,1);
+                            echo "<div style='overflow: hidden; width: auto ; height: 180px;'>
 
-                      </div>
+                          <img src={{asset('storage/'.$photo[$photo_array])}}class='card-img-top img-fluid' alt='...' >
+
+                      </div>";
+                        }
+                        
+                    @endphp
+                    
+                   
+                    
+                      
                       
                       <div class="card-body">
                         <h4 class=" text-center">{{$tour->title}}</h4>
                         <h6 class="card-text text-center font-weight-normal text-uppercase my-2" style="font-size: 17px; color: #f15d30">{{$tour->city->name}}</h6>
                         <a href="{{route('frontend.tour_guide_detail',$tour->id)}}" class="btn btn-secondary form-control my-2">Detail</a>
                       </div>
-                    </div>
+                    </div> 
+
+                    
                    
                 </div>
                 @endforeach
