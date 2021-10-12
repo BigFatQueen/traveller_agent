@@ -74,7 +74,9 @@
 				<h2 class="text-center">{{$tour_guide->title}}</h2>
 
 				@php
+					
 					$photo = json_decode($tour_guide->photo);
+					
 				@endphp
 
 
@@ -82,11 +84,15 @@
 				<div id="carouselExampleControls" class="carousel slide mt-3" data-bs-ride="carousel">
 				  <div class="carousel-inner">
 
+				  	@if($photo != null)
 				  	@foreach($photo as $k => $cover)
 				    <div class="carousel-item @if($k == 0) active @endif ">
 				      <img src="{{asset('storage/'.$cover)}}" class="d-block w-100 " alt="Tour Gallery">
 				    </div>
 				    @endforeach
+				    @else
+				    	<img src="{{asset($tour_guide->photo)}}" class="d-block w-100 " alt="Tour Gallery">
+				    @endif
 
 				  </div>
 				  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -138,6 +144,7 @@
 
 
 		function getTourguide(id){
+
 			var html = "";
 			$.ajax({
                 url: '/ajax_tour_guide'
@@ -145,11 +152,10 @@
                 , data: {id:id}
                 
                 , success: function(json) {
+
                 	var cities = json['city'];
                 	var tour_guide = json['tour_guide'];
                 	var all_photo = [];
-
-                	
 
                    html += `<div class="row mt-5">
                     <div class="mx-auto col-sm-12 col-lg-4">
@@ -227,7 +233,21 @@
 					<div id="carouselExampleControls" class="carousel slide mt-3" data-bs-ride="carousel">
 					  <div class="carousel-inner">`
 
-					  	$.each(JSON.parse(tour_guide.photo),function(c,d){
+					  	try {
+
+					        var photo_type = !!$.parseJSON(tour_guide.photo.toLowerCase());
+
+					    } catch (e) {
+					    	
+					    }
+
+					  	if(photo_type == true)
+					  	{
+					  		var photo = JSON.parse(tour_guide.photo);
+					  	}
+					  	
+					  	
+					  	$.each(photo,function(c,d){
 					  		var data_type = typeof d;
 					  		if(data_type == 'object'){
 					  			$.each(d,function(e,f){
@@ -237,22 +257,26 @@
 					  			all_photo.push(d);
 					  		}
 					  	})
-					  	$.each(all_photo,function(n,m) {
-					  		
-					  	
 
-					    html+=`<div class="carousel-item `; 
+					  	// alert(photo_type);
+					  	if(photo_type == true){
+						  	$.each(all_photo,function(n,m) {
+						  		
+						  	
 
-					    if(n == 0){ html += `active` } 
+						    html+=`<div class="carousel-item `; 
 
-					    html += `">
+						    if(n == 0){ html += `active` } 
 
-					      <img src="{{asset('storage/${m}')}}" class="d-block w-100 " alt="Tour Gallery">
-					    </div>`
+						    html += `"><img src="{{asset('storage/${m}')}}" class="d-block w-100 " alt="Tour Gallery">
+						    </div>`
 
-					    })
+						    
+						    })
+					    
 
-					  html += `</div>
+					  html += `
+					  </div>
 					  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
 					    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
 					    <span class="visually-hidden">Previous</span>
@@ -261,9 +285,15 @@
 					    <span class="carousel-control-next-icon" aria-hidden="true"></span>
 					    <span class="visually-hidden">Next</span>
 					  </button>
-					</div>
+					</div>`;
 
-					<div class="mt-4">
+					}else if(photo_type == undefined){
+
+				    	html += `<div class="active"><img src="${tour_guide.photo}" class="d-block w-100 " alt="Tour Gallery">
+					    </div>`
+				    }
+
+					html += `<div class="mt-4">
 						${tour_guide.desc}
 					</div>
 

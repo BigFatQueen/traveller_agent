@@ -198,6 +198,7 @@
         </div>
 
             <div class="your-class">
+
                 @if(count($tours_carousel) > 0)
                 @foreach($tours_carousel as $tour)
                 <div>
@@ -205,24 +206,29 @@
                     @php
                         
                         $photo=json_decode($tour->photo);
-
-                        if($photo == null){
-                          echo  '<div style="overflow: hidden; width: auto ; height: 180px;">
-
-                          <img src="" class="card-img-top img-fluid" alt="..." >
-
-                      </div>';
-                        }else{
-                            $photo_array = array_rand($photo,1);
-                            echo "<div style='overflow: hidden; width: auto ; height: 180px;'>
-
-                          <img src={{asset('storage/'.$photo[$photo_array])}}class='card-img-top img-fluid' alt='...' >
-
-                      </div>";
-                        }
                         
                     @endphp
-                    
+
+                        @if($photo == null)
+                            <div style="overflow: hidden; width: auto ; height: 180px;">
+
+                                <img src="{{asset($tour->photo)}}" class="card-img-top img-fluid" alt="..." >
+
+                            </div>
+                        @else
+
+                        @php
+                            $photo_array = array_rand($photo,1);
+                        @endphp
+                            <div style='overflow: hidden; width: auto ; height: 180px;'>
+
+                          <img src='{{asset('storage/'.$photo[$photo_array])}}' class='card-img-top img-fluid' alt='...' >
+
+                      </div>
+                      @endif
+                        
+                        
+                   
                    
                     
                       
