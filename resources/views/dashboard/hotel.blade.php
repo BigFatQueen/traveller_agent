@@ -198,7 +198,7 @@ Swal.fire(
               // Return `null` or `undefined` to hide the tick line entirely
              	userCallback: function(value, index, values) {
                 // Convert the number to a string and splite the string every 3 charaters from the end
-                
+
                 
                 return '$' + value;
             	}
