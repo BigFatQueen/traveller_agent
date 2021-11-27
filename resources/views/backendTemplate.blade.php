@@ -412,7 +412,9 @@
                                     <i class="ni ni-tv-2 text-primary"></i> City
                                 </a>
                             </li>
-                            <!-- type -->
+                           
+                        
+                         <!-- type -->
                             <li
                                 class="nav-item {{ Request::is('type*') ? 'active' : '' }}"
                             >
@@ -423,7 +425,7 @@
                                     <i class="ni ni-pin-3 text-orange"></i> Type
                                 </a>
                             </li>
-                        @endhasanyrole
+                            @endhasanyrole
 
                         @hasanyrole('admin|car')
                         <!-- admin/car -->

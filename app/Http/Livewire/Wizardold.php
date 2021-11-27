@@ -1,15 +1,15 @@
 <?php
-  
-namespace App\Http\Livewire;
-use Livewire\Component;
 
+namespace App\Http\Livewire;
+
+use Livewire\Component;
 use App\Models\City;
 use App\Models\Car;
 use App\Models\Booking;
 use App\Http\Resources\CarResource;
 use Carbon\Carbon;
 use Auth;
-  
+
 class Wizard extends Component
 {
     public $currentStep = 1;
@@ -19,77 +19,120 @@ class Wizard extends Component
     public $loc;
     public $loc_id;
     // starting
-
-    public $totalcars;
+    public  $cars;
     public $car;
-
-    public $car_name,
-    $car_codeno,
-    $car_photo,
-    $car_model,
-    $car_seats,
-    $car_doors,
-    $car_bags,
-    $car_aircon,
-    $car_status,
-    $car_priceperday,
-    $car_discount,
-    $car_qty;
+   
+    public $car_name='',
+    $car_codeno='',
+    $car_photo='',
+    $car_model='',
+    $car_seats='',
+    $car_doors='',
+    $car_bags='',
+    $car_aircon='',
+    $car_status='',
+    $car_priceperday='',
+    $car_discount='',
+    $car_qty='';
+  
+    public $location=[];
+    public $company_phone='',
+    $company_name='',
+    $city_name='';
+    public $type_name='',
+    $brand_name='',
+    $company_address='';
 
     public $drop='',$pickup='',$sdate='',$edate='';
 
-     public function mount($cars)
-    {
-        $this->totalcars=$cars;
+
+   
+
+
+    public function mount($cars,$drop,$pickup,$sdate,$edate){
+        $this->cars=$cars;
+        $this->drop=$drop;
+        $this->pickup=$pickup;
+        $this->sdate=$sdate;
+        $this->edate=$edate;
     }
-  
-    /**
-     * Write code on Method
-     */
+
     public function render()
     {
+        $cars=$this->cars;
+        
+        
 
-        return view('livewire.wizard',['cars'=>$this->totalcars]);
+        $cities=City::whereNull('parent_id')->get();
+
+
+
+        return view('livewire.wizard',compact('cars','cities'));
     }
-  
-    /**
-     * Write code on Method
-     */
+
     public function firstStepSubmit($id)
     {
+
+
+       
         $c=Car::find($id);
-
+        
         $this->car=$c;
-            
-        // $this->car_name=$c->name;
-        // // dd($this->car_name);
-        // $this->car_codeno=$c->codeno;
-        // $this->car_photo=$c->photo;
-        // $this->car_model=$c->model;
-        // $this->car_seats=$c->seats;
-        // $this->car_doors=$c->doors;
-        // $this->car_bags=$c->bags;
-        // $this->car_aircon=$c->aircon;
-        // $this->car_status=$c->status;
-        // $this->car_priceperday=$c->priceperday;
-        // $this->car_discount=$c->discount;
-        // $this->car_qty=$c->car_qty;
 
-         // $validatedData = $this->validate([
+
+
+        // dd($car['name']);
+        foreach($c->pickuppivot as $p)
+        {
+            $fullname=$p->name;
+            $city=$p->parent->name;
+            $format=['name'=>$fullname,'city'=>$city,'id'=>$p->id];
+            array_push($this->location, $format);
+        }
+        // dd($this->location);
+         // INSERT INTO `cars`(`id`, `name`, `codeno`, `photo`, `model`, `seats`, `doors`, `bags`, `aircon`, `status`, `brand_id`, `type_id`, `company_id`, `priceperday`, `discount`, `qty`, `deleted_at`, `created_at`, `updated_at`, `city_id`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9],[value-10],[value-11],[value-12],[value-13],[value-14],[value-15],[value-16],[value-17],[value-18],[value-19],[value-20])
+        $this->car_name=$c->name;
+        $this->car_codeno=$c->codeno;
+        $this->car_photo=$c->photo;
+        $this->car_model=$c->model;
+        $this->car_seats=$c->seats;
+        $this->car_doors=$c->doors;
+        $this->car_bags=$c->bags;
+        $this->car_aircon=$c->aircon;
+        $this->car_status=$c->status;
+        $this->car_priceperday=$c->priceperday;
+        $this->car_discount=$c->discount;
+        $this->car_qty=$c->car_qty;
+
+        $this->company_name=$c->company->name ==!''? $c->company->name:'';
+        $this->company_phone=$c->company->phone;
+        $this->company_address=$c->company->addresss;
+
+        $this->type_name=$c->type->name;
+        $this->brand_name=$c->brand->name;
+        $this->city_name=$c->city->name;
+
+
+    
+        // dd(var_dump($this->car));
+        // $validatedData = $this->validate([
         //     'name' => 'required',
         //     'price' => 'required|numeric',
         //     'detail' => 'required',
         // ]);
- 
-         $this->currentStep = 2;
+
+        $this->currentStep = 2;
+
+        
     }
   
     /**
      * Write code on Method
      */
-    public function secondStepSubmit($id)
+    public function secondStepSubmit()
     {
-        $this->car=Car::find($id);
+        
+
         if(!empty($this->loc)){
              $finalpickup=City::find($this->loc);
             // dd($finalpickup);
@@ -98,7 +141,8 @@ class Wizard extends Component
             $this->city=$finalpickup->parent->name;
        
         }
-        $this->currentStep = 3;
+        
+         $this->currentStep = 3;
     }
 
     function generateRandomString($length = 20) {
@@ -110,6 +154,7 @@ class Wizard extends Component
             }
             return $randomString;
         }
+       
   
     /**
      * Write code on Method

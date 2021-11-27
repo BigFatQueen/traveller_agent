@@ -120,6 +120,7 @@ class FrontController extends Controller
         $e_date=$request->end_date;
 
         $cars=Car::where('city_id',$pickup)->get();
+        // dd($cars);
         $pickup=City::find($pickup);
         $drop=City::find($drop);
 

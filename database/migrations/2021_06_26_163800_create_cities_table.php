@@ -121,6 +121,10 @@ class CreateCitiesTable extends Migration
             $table->BigInteger('type_id')->unsigned();
             $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
 
+            $table->BigInteger('city_id')->unsigned();
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
+
+
             $table->BigInteger('company_id')->unsigned();
             
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');

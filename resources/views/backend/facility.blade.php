@@ -39,7 +39,6 @@
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Type</th>
-                        <th scope="col">Price</th>
                         <th scope="col">Action</th>
                        
                       </tr>
@@ -62,7 +61,7 @@
 
      {{-- new adding model start --}}
      
-      <div class="modal fade" id="newexampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal " id="newexampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -89,7 +88,7 @@
                      <span class="error-name text-danger"></span>
                       <input type="text" class="form-control" name="name" id="name" placeholder="Enter New facility Name">
                   </div>
-                  <div class="col-sm-12 mb-3">
+                  <div class="col-sm-12 mb-3 d-none">
                       <label for="price">Cost($)</label><br/>
                       <span class="error-price text-danger"></span>
                       <input type="number" class="form-control" name="price" id="price" value="0">
@@ -111,7 +110,7 @@
 
       {{-- updating model start --}}
      
-      <div class="modal fade" id="updatingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade " id="updatingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -140,7 +139,7 @@
                      <span class="error-name text-danger"></span>
                       <input type="text" class="form-control" name="ename" id="name" placeholder="Enter New facility Name">
                   </div>
-                  <div class="col-sm-12 mb-3">
+                  <div class="col-sm-12 mb-3 d-none">
                       <label for="price">Cost($)</label><br/>
                       <span class="error-price text-danger"></span>
                       <input type="number" class="form-control" name="eprice" id="price" placeholder="Enter Price ">
@@ -149,7 +148,7 @@
                   
                   <div class="col-sm-12 ">
                     <button type="submit" class="btn btn-primary float-right ">Update changes</button>
-                      <button type="button" class="btn btn-danger float-right mr-2 "  data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-danger float-right mr-2 "  data-bs-dismiss="modal">Close</button>
                     
                   </div>
               </form>
@@ -176,9 +175,8 @@
     });
 
    
-
     $('#facility-newform').submit(function(e){
-      e.preventDefault();
+           
       // 
       let formdata=$("#facility-newform").serialize();
 
@@ -188,14 +186,18 @@
         data:formdata,
         success:function(res){
 
-          swal('Good job','successfully added!',"success").then(function(){
-            $('.error-name').html('');
-            $('.error-type_id').html('');
-            $('.error-price').html('');
+            // $('.error-name').html('');
+            // $('.error-type_id').html('');
+            // $('.error-price').html('');
             $('#facility-newform').trigger("reset");
-             $('#newexampleModal').modal('hide');
+   
+             
+            // $('#newexampleModal').modal('hide');
+           //  $('#newexampleModal').modal().hide();
+
+      
              $('#facility-table').DataTable().ajax.reload();
-          });
+          // new  swal('Good job','successfully added!',"success");
 
           
           
@@ -212,11 +214,10 @@
         }
         
       })
+       e.preventDefault();
     })
 
-    $('#newexampleModal').on('hidden.bs.modal', function (event) {
-      $('#facility-newform').trigger("reset");
-    });
+    
 
 
 
@@ -241,9 +242,6 @@
               {data:'DT_RowIndex'},
               {data:'name'},
               {data:'fcategory.name'},
-              {data:function(data){
-                return data.price+' $';
-              }},
               {data:'action',searchable:false,orderable:false}
             ]
             
@@ -270,7 +268,7 @@
      
 
      $('#facility-updateform').submit(function(e){
-      e.preventDefault();
+     
       let id=$('input[name="oldid"]').val();
         let formdata=$(this).serialize();
         $.ajax({
@@ -279,18 +277,17 @@
           data:formdata,
           success:function(res){
             // console.log(res);
-             swal('Good job','successfully updated!',"success").then(function(){
-            $('#facility-updateform').trigger("reset");
+                        $('#facility-updateform').trigger("reset");
              $('#updatingModal').modal('hide');
              $('#facility-table').DataTable().ajax.reload();
-          });
-
+            new swal('Good job','successfully updated!',"success");
           },
           error:function(err){
             swa('Sorry!','Something went wrong!','error');
           }
 
         })
+         e.preventDefault();
      })
 
 

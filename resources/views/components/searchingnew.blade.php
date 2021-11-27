@@ -320,7 +320,7 @@ Session::get('error_code') == 2)
    // console.log("data helelo");
 
    e.preventDefault();
-   alert("heo");
+   // alert("heo");
    let city = $('#hotel-search-div select[name="d_city_id"]').val();
    let check_in = $(
     '#hotel-search-div input[name="start_date"]'
