@@ -44,7 +44,7 @@
                           <input type="hidden" name="category" value="1" class="hotel_hidden_value">
 			                    <div class="col-sm-8">
 			                       
-			                        <input type="text" class="form-control" name="name" id="specificSizeInputName" placeholder="Enter New City Name">
+			                        <input type="text" class="form-control" name="name" id="specificSizeInputName" placeholder="Enter New type Name">
 			                    </div>
 			                    
 			                    <div class="col-12 col-xl-3 col-lg-3 col-md-3 col-sm-12 ">

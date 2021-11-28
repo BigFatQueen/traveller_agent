@@ -121,6 +121,7 @@ class Company extends Component
                 $filename=time();
 
                 $path = $this->logo->storeAs('logo',$filename,'public');
+                // dd($path);
                  $license = $this->logo->storeAs('license','l-'.$filename,'public');
 
                 

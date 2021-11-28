@@ -44,7 +44,12 @@ Route::resource('pickup',PickPlaceController::class);
 Route::get('getPickupAjax',[PickPlaceController::class,'getPickupAjax'])->name('getPickupAjax');
 
 
-Route::resource('type',TypeController::class);
+Route::group(['middleware' => ['auth','role:admin']], function () {
+    Route::resource('type',TypeController::class);
+});
+
+
+
 Route::post('ajax/getChildType',[TypeController::class,'getChildType'])->name('ajax.getChildType');
 
 Route::resource('car',CarController::class);
